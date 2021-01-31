@@ -45,7 +45,6 @@ int main(int argc, char **argv) {
     u8 *fb = gfxGetFramebuffer(GFX_BOTTOM, GFX_LEFT, NULL, NULL);
     memcpy(fb, sound_bgr, sound_bgr_size);
     while (aptMainLoop()) {
-        printf("\x1b[128;1m");  
         hidScanInput();
 
         u32 kDown = hidKeysDown();
