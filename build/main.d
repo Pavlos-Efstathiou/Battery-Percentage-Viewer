@@ -79,8 +79,7 @@ main.o: C\:/Users/jimos/Desktop/Battery/source/main.c \
  C\:/devkitPro/libctru/include/3ds/romfs.h \
  C\:/devkitPro/libctru/include/3ds/font.h \
  C\:/devkitPro/libctru/include/3ds/gdbhio_dev.h \
- C\:/Users/jimos/Desktop/Battery/source/colors.h \
- C\:/Users/jimos/Desktop/Battery/build/sound_bgr.h
+ C\:/Users/jimos/Desktop/Battery/source/colors.h
 C\:/devkitPro/libctru/include/3ds.h:
 C\:/devkitPro/libctru/include/3ds/types.h:
 C\:/devkitPro/libctru/include/3ds/result.h:
@@ -162,4 +161,3 @@ C\:/devkitPro/libctru/include/3ds/romfs.h:
 C\:/devkitPro/libctru/include/3ds/font.h:
 C\:/devkitPro/libctru/include/3ds/gdbhio_dev.h:
 C\:/Users/jimos/Desktop/Battery/source/colors.h:
-C\:/Users/jimos/Desktop/Battery/build/sound_bgr.h:

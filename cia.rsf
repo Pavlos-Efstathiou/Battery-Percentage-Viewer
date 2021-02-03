@@ -1,6 +1,6 @@
 BasicInfo:
   Title                   : "Battery Viewer"
-  ProductCode             : "BATTVIEW"
+  ProductCode             : "CTR-BAT-VIEW"
   ContentType             : Application
   Logo                    : Nintendo # Nintendo / Licensed / Distributed / iQue / iQueForSystem
 
