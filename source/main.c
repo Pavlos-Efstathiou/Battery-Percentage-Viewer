@@ -1,47 +1,16 @@
 #include <3ds.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "colors.h"
 
-#define TRUE "true"
-#define FALSE "false"
-
-int pos = 0;
-char* text1 = "\x1b[0;0HBattery percentage";
-char* text2 = "\x1b[0;0HExit";
-
-void selector(int textNum) {
-    char arrow[6];
-    int textSize = 1;
-
-    if (pos > textSize)
-        pos = textSize;
-    if (pos < 0) 
-        pos = 0;
-
-    if ( (textNum == 0) || (textNum == 1) )
-        strncpy(arrow, TRUE, sizeof(arrow));
-    else
-        strncpy(arrow, FALSE, sizeof(arrow));
-
-    if (strcmp(arrow, TRUE) == 0)
-        strncpy(arrow, "->", sizeof(arrow));
-    if (strcmp(arrow, TRUE) != 0)
-        strncpy(arrow, "->", sizeof(arrow));
-
-    if (textNum == 0)
-        printf("%s %s", arrow, *text1);
-    if (textNum == 1)
-        printf("%s %s", arrow, *text2);
-}
-void selector( int );
-void batterySelect() {
-    PrintConsole topScreen, bottomScreen;
+void batterySelect( void ) {
+    
     u8 batteryLevel;
     MCUHWC_GetBatteryLevel(&batteryLevel);
     int battLevel = batteryLevel;
+    printf("\x1b[2;0H                                   ");
     if (battLevel > 50) {
-        consoleSelect(&topScreen);
         printf("\x1b[0;0H");
         printf("Battery: ");
         green();
@@ -49,7 +18,6 @@ void batterySelect() {
         reset();
     }
     else if (battLevel <= 50 && battLevel > 25) {
-        consoleSelect(&topScreen);
         printf("\x1b[0;0H");
         printf("Battery: ");
         yellow();
@@ -57,45 +25,89 @@ void batterySelect() {
         reset();
     }
     else if (battLevel <= 25) {
-        consoleSelect(&topScreen);
         printf("\x1b[0;0H");
         printf("Battery: ");
         red();
         printf("%d%%\n", battLevel);
         reset();
     }
-};
-int main(int argc, char **argv) {
-    PrintConsole topScreen, bottomScreen;
+}
 
-    gfxInitDefault();
-	mcuHwcInit();
-    consoleInit(GFX_TOP, &topScreen);
-	consoleInit(GFX_BOTTOM, &bottomScreen);
-
-    while (aptMainLoop()) {
-
+void arrow( void ) {
+    int pos = 0;
+    char* text0 = "Battery percentage\n";
+    char* text1 = "Exit              \n";
+    while (true) {
+        mcuHwcInit();
         hidScanInput();
 
         u32 kDown = hidKeysDown();
-        selector(0);
-        selector(1);
-        if (kDown & KEY_CPAD_UP) {
+
+        if (kDown & KEY_DUP) {
             pos++;
         }
-        if (kDown & KEY_CPAD_DOWN) {
+        if (kDown & KEY_DDOWN) {
             pos--;
         }
 
-        if (kDown & KEY_START) break;
+        if (pos > 1)
+            pos = 0;
+        if (pos < 0)
+            pos = 1;
 
-        // Flush and swap framebuffers
-        gfxFlushBuffers();
-		gfxSwapBuffers();
-		//Wait for VBlank
-		gspWaitForVBlank();
+        if (pos == 1) {
+            printf("\x1b[0;0H %s\n", text0);
+            printf("\x1b[2;0H-> %s\n", text1);
+        }
+        if (pos == 0) {
+            printf("\x1b[0;0H-> %s\n", text0);
+            printf("\x1b[2;0H %s\n", text1);
+        }
+
+        if (pos == 1 && kDown & KEY_A) {
+            break;
+        }
+        if (pos == 0 && kDown & KEY_A) {
+            consoleClear();
+            while (true) {
+                hidScanInput();
+
+                u32 kDown = hidKeysDown();
+                batterySelect();
+                if (kDown & KEY_B) break;
+            }
+        }
+
+        if (kDown & KEY_B) break;
     }
-	mcuHwcExit();
+}
+
+
+int main() { //int argc, char **argv) {
+    PrintConsole topScreen, bottomScreen;
+
+    gfxInitDefault();
+    consoleInit(GFX_TOP, &topScreen);
+	consoleInit(GFX_BOTTOM, &bottomScreen);
+
+    consoleSelect(&topScreen);
+    arrow();
+
+    // while (aptMainLoop()) {
+    //     hidScanInput();
+
+    //     u32 kDown = hidKeysDown();
+        
+
+    //     if (kDown & KEY_START) break;
+
+    //     // Flush and swap framebuffers
+    //     gfxFlushBuffers();
+	// 	gfxSwapBuffers();
+	// 	//Wait for VBlank
+	// 	gspWaitForVBlank();
+    // }
+    mcuHwcExit();
 	gfxExit();
 	return 0;
 }
