@@ -1,2 +1,5 @@
 /build
-
+*.smdh
+*.cia
+*.3dsx
+*.elf

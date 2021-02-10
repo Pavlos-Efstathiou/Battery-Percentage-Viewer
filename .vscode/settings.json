@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "battery.h": "c",
+        "3ds.h": "c"
+    }
+}

@@ -1,5 +1,6 @@
-#include "colors.h"
 #include <stdio.h>
+
+#include "colors.h"
 
 void black() {
     printf("\033[0;30m");
